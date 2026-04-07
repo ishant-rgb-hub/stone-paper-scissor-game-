@@ -85,8 +85,15 @@ function App() {
   }
 
   const winScore = gameMode ? Math.ceil(gameMode/2) : 0
-  const gameOver = userScore >= winScore || compScore >= winScore
-  const winner = userScore >= winScore ? 'You' : compScore >= winScore ? 'Computer' : null
+  const gameOver = userScore >= winScore || compScore >= winScore || count === Number(gameMode)
+  let winner = null
+  if (userScore >= winScore) winner = 'You'
+  else if (compScore >= winScore) winner = 'Computer'
+  else if (count === Number(gameMode)) {
+    if (userScore > compScore) winner = 'You'
+    else if (compScore > userScore) winner = 'Computer'
+    else winner = 'Tie'
+  }
 
   if (!gameStarted) {
     return (
@@ -112,7 +119,9 @@ function App() {
       {gameOver && (
         <div className="winner-area">
           <button className="winner-button" onClick={resetGame}>
-            🏆 {winner} won the match — Play Again
+            {winner === 'Tie'
+              ? "🤝 It's a Tie! Play Again"
+              : `🏆 ${winner} won the match — Play Again`}
           </button>
         </div>
       )}
